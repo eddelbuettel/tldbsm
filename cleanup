@@ -1,0 +1,14 @@
+#!/bin/sh
+
+rm -r -f \
+   src/*.o src/*/*.o src/*.so src/*.dylib */*~ *~ \
+   src/Makevars \
+   tiledb.tar.gz \
+   tiledb/ \
+   inst/tiledb/ \
+   src/include/ \
+   src/lib \
+   src/cmake_log.txt \
+   src/build \
+   src/libtiledbsoma \
+   inst/tiledb
