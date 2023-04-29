@@ -4,16 +4,17 @@ CXX_STD = CXX17
 PKG_CPPFLAGS = -I. -I../inst/include/ @tiledb_include@ -DR_BUILD @cxx17_macos@ -Iinclude -Wno-deprecated-declarations -Wno-deprecated
 
 ## We also need the TileDB library
-PKG_LIBS = @cxx17_macos@ @tiledb_libs@ @tiledb_rpath@ ./soma/managed_query.o ./soma/soma_array.o ./utils/logger.o ./utils/stats.o ./utils/column_buffer.o ./utils/version.o ./utils/util.o
+PKG_LIBS = $(XTRAOBJECTS) @cxx17_macos@ @tiledb_libs@ @tiledb_rpath@
 
-.PHONY: all
+XTRAOBJECTS =./soma/managed_query.o ./soma/soma_array.o ./utils/logger.o ./utils/stats.o ./utils/column_buffer.o ./utils/version.o ./utils/util.o
 
-$(SHLIB): soma/managed_query.o soma/soma_array.o utils/logger.o utils/stats.o utils/column_buffer.o utils/version.o utils/util.o
-
-all: $(SHLIB)
+all: $(SHLIB) $(XTRAOBJECTS)
         # if we are
         #  - not on Window NT (a tip from data.table)
         #  - on macOS aka Darwin which needs this
         #  - the library is present (implying non-system library use)
         # then let us call install_name_tool
-	if [ "$(OS)" != "Windows_NT" ] && [ `uname -s` = 'Darwin' ] && [ -f ../inst/tiledb/lib/libtiledb.dylib ] && [ -f tiledbsoma.so ]; then install_name_tool -change libz.1.dylib @rpath/libz.1.dylib ../inst/tiledb/lib/libtiledb.dylib; install_name_tool -add_rpath @loader_path/../tiledb/lib tiledbsoma.so; fi
+	if [ `uname -s` = 'Darwin' ] && [ -f ../inst/tiledb/lib/libtiledb.dylib ] && [ -f tiledbsoma.so ]; then install_name_tool -change libz.1.dylib @rpath/libz.1.dylib ../inst/tiledb/lib/libtiledb.dylib; install_name_tool -add_rpath @loader_path/../tiledb/lib tiledbsoma.so; fi
+	if [ "$(OS)" != "Windows_NT" ]; then echo "Lucky you"; fi
+
+$(SHLIB): $(XTRAOBJECTS)
