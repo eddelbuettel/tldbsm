@@ -6,7 +6,7 @@ on:
       - "apis/python/**"
       - ".pre-commit-config.yaml"
   push:
-    branches: [main]
+    branches: [main, master]
 
 env:
   COVERAGE_FLAGS: "r"
@@ -26,10 +26,10 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Bootstrap
-        run: cd apis/r && tools/r-ci.sh bootstrap
+        run: tools/r-ci.sh bootstrap
 
       - name: Dependencies
-        run: cd apis/r && tools/r-ci.sh install_all
+        run: tools/r-ci.sh install_all
 
       - name: CMake
         uses: lukka/get-cmake@latest
@@ -37,17 +37,17 @@ jobs:
       - name: MkVars
         run: mkdir ~/.R && echo "CXX17FLAGS=-Wno-deprecated-declarations -Wno-deprecated" > ~/.R/Makevars
 
-      - name: Copy libtiledbsoma
-        ## we build 'as in an R package' with all sources within apis/r/
-        run: cd apis/r && ./copy_source.sh
+      #- name: Copy libtiledbsoma
+      #  ## we build 'as in an R package' with all sources within apis/r/
+      #  run: cd apis/r && ./copy_source.sh
 
       - name: Test
-        run: cd apis/r && tools/r-ci.sh run_tests
+        run: tools/r-ci.sh run_tests
 
-      - name: View Install Output
-        run: cat $HOME/work/TileDB-SOMA/TileDB-SOMA/apis/r/tiledbsoma.Rcheck/00install.out
-        if: failure()
+      #- name: View Install Output
+      #  run: cat $HOME/work/TileDB-SOMA/TileDB-SOMA/apis/r/tiledbsoma.Rcheck/00install.out
+      #  if: failure()
 
-      - name: Coverage
-        if: ${{ matrix.os == 'ubuntu-latest' }}
-        run: cd apis/r && tools/r-ci.sh coverage
+      #- name: Coverage
+      #  if: ${{ matrix.os == 'ubuntu-latest' }}
+      #  run: cd apis/r && tools/r-ci.sh coverage
