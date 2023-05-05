@@ -6,9 +6,9 @@ PKG_CPPFLAGS = -I. -I../inst/include/ @tiledb_include@ -DR_BUILD @cxx17_macos@ -
 ## We also need the TileDB library
 PKG_LIBS = $(XTRAOBJECTS) @cxx17_macos@ @tiledb_libs@ @tiledb_rpath@
 
-XTRAOBJECTS =./soma/managed_query.o ./soma/soma_array.o ./utils/logger.o ./utils/stats.o ./utils/column_buffer.o ./utils/version.o ./utils/util.o
+XTRAOBJECTS = ./soma/managed_query.o ./soma/soma_array.o ./utils/logger.o ./utils/stats.o ./utils/column_buffer.o ./utils/version.o ./utils/util.o
 
-all: $(SHLIB) $(XTRAOBJECTS)
+all: $(XTRAOBJECTS) $(SHLIB)
         # If we are:
         #  - on macOS aka Darwin which needs this
         #  - the library is present (implying non-system library use)
