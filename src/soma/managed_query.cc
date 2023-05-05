@@ -31,7 +31,7 @@
  */
 
 #include "soma/managed_query.h"
-#include "tiledbsoma/logger_public.h"
+#include "soma/logger_public.h"
 #include "utils/common.h"
 
 namespace tiledbsoma {
